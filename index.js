@@ -10,6 +10,7 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(session({
+    key:'user_id',
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: false
@@ -28,16 +29,15 @@ const users=[{
 let error;
 
 function isLoggedIn(req,res,next) {
-    console.log('req.session islog',req.session);
-    console.log('req.session.user',req.session.user);
-    // if(req.session.user){
-    //     console.log('req.session.user',req.session.user);
-    //     next()
-    // }
-    // else {
-    //     error='user not found'
-    //     next(error);
-    // }
+    // console.log('req.session islog',req.session);
+    // console.log('req.session.user',req.session.user);
+    if(req.session.user && req.cookies.user_id){
+        console.log('req.session.user',req.session.user);
+        next()
+    }
+    else {
+        res.redirect('/login')
+    }
 
 }
 
@@ -56,9 +56,9 @@ app.post('/registration', async (req, res) => {
         confirmPassword:data.confirmPassword
     }
     if(user.password===user.confirmPassword){
-        console.log('hello')
                 users.push(user);
         res.redirect('/login');
+        console.log('hello user',user)
     }
     else {
         error='Password not matched';
@@ -71,7 +71,7 @@ app.post('/registration', async (req, res) => {
 });
 
 
-app.get('/', (req, res) => {
+app.get('/', isLoggedIn,(req, res) => {
     console.log(req.session);
     res.render('pages/index', {todos});
 });
@@ -86,54 +86,31 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    try{
-        const data = req.body;
-        console.log("req session",req.session)
-        const existingUser = users.filter((currentUser,index)=>currentUser.email == req.body.email && currentUser.password==req.body.password);
-        console.log("existingUser",existingUser);
-        if(existingUser.length > 0 && existingUser[0]){
-            console.log("existingUser[0]",existingUser[0]);
-            req.session.user=existingUser[0];
-           // res.redirect('/');
-        }
-        console.log('eee')
+    const existingUser = users.filter((currentUser,index)=>currentUser.email == req.body.email && currentUser.password==req.body.password);
 
-   /*     users.filter((currentUser,index)=>{
-            if(currentUser.email===req.body.email && currentUser.password===req.body.password){
-                console.log("currentUser",currentUser);
-                req.session.user=currentUser
-                console.log(" req.session.currentUser", req.session.currentUser);
-                //res.redirect('/');
-            }
-        })*/
+    if(existingUser.length > 0 && existingUser[0]){
+        req.session.user=existingUser[0];
         res.redirect('/');
     }
-    catch (e) {
-        console.log('e',e);
-        throw e;
+    else {
+        res.redirect('/login')
     }
 
 });
 
 
 
+app.post('/', (req, res) => {
+    const { todo, deleteIndex } = req.body;
 
+    if (deleteIndex !== undefined) {
+        todos.splice(deleteIndex, 1);
+    } else if (todo !== '') {
+        todos.push(todo);
+    }
 
-
-
-//
-//
-// app.post('/', (req, res) => {
-//     const { todo, deleteIndex } = req.body;
-//
-//     if (deleteIndex !== undefined) {
-//         todos.splice(deleteIndex, 1);
-//     } else if (todo !== '') {
-//         todos.push(todo);
-//     }
-//
-//     res.redirect('/');
-// });
+    res.redirect('/');
+});
 
 
 app.listen(3000, () => {
