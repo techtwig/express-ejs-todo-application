@@ -1,0 +1,51 @@
+body{
+	font-family: san-sherif;
+	background-image: url(login-image.png);
+	background-size: cover;
+	background-position: center;
+}
+
+.login-title{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: blue;
+}
+
+.center-container{
+	margin: auto;
+	margin-top: 10%;
+	width: 30%;
+	padding: 30px 10px 10px 10px;
+	border-radius: 20px;
+	background-color: white;
+	
+}
+
+.input-box{
+	border-radius: 20px;
+	padding: 10px;
+	margin: 10px 0;
+	width: 100%;
+	border: 1px solid #999;
+	outline: none;
+}
+
+.login-btn{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.login-btn button{
+	background-color: blue;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	
+}
+
+.already-account{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
