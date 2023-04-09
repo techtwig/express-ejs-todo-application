@@ -79,38 +79,25 @@ app.post("/login", async (req, res) => {
 				res.redirect('/');
 			}else{
 				res.status(401).json({
-				"error": "Authentication failedddd!"
+				"error": "Authentication failed."
 			});
 			
 			}
 			
 		}else{
 			res.status(401).json({
-				"error": "Authentication failedzzzzz!"
+				"error": "Authentication failed."
 			});
 		}
 		
 	}catch (e){
 		res.status(401).json({
-				"error": "Authentication failed! last"
+				"error": "Authentication failed."
 			});
 	}
 });
 
-
-app.get('/user', (req, res) => {
-	user = service.user.getUser();
-    res.render('pages/index', context );
-});
-
-
-app.post('/user', (req, res) => {
-	context = { todos }
-    res.render('pages/index', context );
-});
-
-
-app.post('/', (req, res) => {
+app.post('/', sessionChecker, (req, res) => {
     const { todo, deleteIndex } = req.body;
 
     if (deleteIndex !== undefined) {
@@ -120,6 +107,16 @@ app.post('/', (req, res) => {
     }
 
     res.redirect('/');
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect('/login');
+    }
+  });
 });
 
 app.listen(3000, () => {

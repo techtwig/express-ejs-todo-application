@@ -70,6 +70,20 @@ button[type="submit"] {
     background-color: #05b214;
 }
 
+.logout-middle{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.logout-btn{
+	background-color: red;
+}
+
+.logout-btn:hover {
+    background-color: #C70039;
+}
+
 label {
     display: block;
     font-size: 18px;
