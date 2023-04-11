@@ -4,14 +4,13 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            unique: true
         },
     userName: {
       type: Sequelize.STRING,
       allowNull: false,
-      // validate: {
-      //   len: [5, 10]
-      // }
+      validate: {
+        len: [3, 50]
+      }
       
     },
     email: {
@@ -22,10 +21,10 @@ module.exports = (sequelize, Sequelize) => {
         isEmail: true, 
       }
       
-      
     },
 	password: {
       type: Sequelize.STRING,
+
     },
 	confirmPassword:{
 		type: Sequelize.STRING,

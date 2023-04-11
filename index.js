@@ -5,7 +5,6 @@ var session = require("express-session");
 const app = express();
 const db = require("./App/models/database");
 const bcrypt = require("bcrypt");
-const { log } = require("console");
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,11 +26,24 @@ app.use(
 );
 
 const todos = [];
-let error;
 
-function isLoggedIn(req, res, next) {
+async function checkLoggedIn  (req, res, next) {
+    console.log('checkLoggedIn',req.body)
   if (req.session.id && req.session.userId) {
-    next();
+  const user = await db.users.findOne({
+      where: {
+        id: req.session.userId,
+      },
+      raw: true,
+    });
+  if(user){
+     next();
+  }
+  else{
+    res.redirect("/login");
+  }
+
+   
   } else {
     res.redirect("/login");
   }
@@ -44,29 +56,28 @@ app.get("/registration", (req, res) => {
 app.post("/registration", async (req, res) => {
   try {
     const { userName, email, password, confirmPassword } = req.body;
-    let user;
+    
     if (password === confirmPassword) {
-
-     bcrypt.hash(password, 10,async function (err, hash) {
-      user = {
+     const hashedPassword = await bcrypt.hash(password, 10);
+      const user = {
         userName: userName,
         email: email,
-        password: hash,
+        password: hashedPassword,
       };
+    
       await db.users.create(user);
-      res.status(200);
-      res.redirect("/login");
-    });
-
+      res.status(200).redirect("/login");
+    }
+    else {
+        throw new Error('password and confirmPassword not matched.');
     }
   } catch (e) {
-    console.log('===============error=============',e)
-    res.status(500).json(e.message);
+    res.status(500);
   }
 
 });
 
-app.get("/", isLoggedIn, (req, res) => {
+app.get("/", checkLoggedIn, (req, res) => {
   res.render("pages/index", { todos });
 });
 
@@ -87,11 +98,9 @@ app.post("/login", async (req, res) => {
 
     if (isExistUser) {
       bcrypt.compare(password, isExistUser.password, function (err, result) {
-        if (result === true) {
-
+        if (result) {
           res.status(200);
           req.session.userId = isExistUser.id;
-          console.log(' req.session.userId=====', req.session.userId, req.session);
           res.redirect("/");
         } 
         else {
