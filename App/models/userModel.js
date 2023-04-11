@@ -3,13 +3,26 @@ module.exports = (sequelize, Sequelize) => {
 	 id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
+            unique: true
         },
     userName: {
       type: Sequelize.STRING,
+      allowNull: false,
+      // validate: {
+      //   len: [5, 10]
+      // }
+      
     },
     email: {
       type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true, 
+      }
+      
+      
     },
 	password: {
       type: Sequelize.STRING,

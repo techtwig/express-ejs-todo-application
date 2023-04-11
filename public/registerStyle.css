@@ -48,5 +48,17 @@ button{
 button:hover{
     background: #4e7664;
 }
+.new{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+}
+.signUp{
+    color: dodgerblue;
+    font-family: ui-rounded;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}
 
 
