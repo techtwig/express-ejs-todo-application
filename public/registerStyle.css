@@ -1,0 +1,64 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Jost', sans-serif;
+    background: linear-gradient(to bottom, #ffffff, #fbfbfb, #f6f6fd);
+}
+.register-form{
+    width: 30%;
+    background-color: rgba(255,255,255,0.13);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 30px rgb(8 7 16 / 19%);
+    padding: 50px 35px;
+
+}
+.heading{
+    text-align: center;
+}
+
+input{
+    width: 100%;
+    height: 20px;
+    background: #e0dede;
+    margin: 20px auto;
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+button{
+    width: 60%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    display: block;
+    color: #fff;
+    background: #406253;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 20px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+    cursor: pointer;
+}
+button:hover{
+    background: #4e7664;
+}
+.new{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+}
+.signUp{
+    color: dodgerblue;
+    font-family: ui-rounded;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
